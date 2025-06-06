@@ -29,10 +29,10 @@ interface MaintenanceOption {
 
 const PROJECT_TYPES: ProjectTypeOption[] = [
   { label: "Landing Page (GHC3,000)", value: "landing", baseCost: 3000 },
-  { label: "Simple Full Website (GHC5,000)", value: "simple", baseCost: 5000 },
+  { label: "Simple Full Website (GHC8,000)", value: "simple", baseCost: 8000 },
   { label: "E-commerce Website (GHC18,000)", value: "ecommerce", baseCost: 18000 },
-  { label: "Web App UI Design (GHC12,000)", value: "webapp", baseCost: 12000 },
-  { label: "CMS Website (GHC15,000)", value: "cms", baseCost: 15000 },
+  { label: "Web App UI Design (GHC15,000)", value: "webapp", baseCost: 15000 },
+  { label: "CMS Website (GHC20,000)", value: "cms", baseCost: 20000 },
 ];
 
 const FEATURES: FeatureOption[] = [
@@ -89,49 +89,47 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
   // Download PDF implementation
   const handleDownload = () => {
     const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text("Your Custom Quote", 14, 18);
+    doc.setFontSize(20);
+    doc.text("Your Custom Quote", 14, 25);
+
+    let y = 40;
     doc.setFontSize(12);
-    let y = 30;
-    doc.text(`Project Type: ${projectType.label}`, 14, y);
+
+    const addLineItem = (label: string, value: string) => {
+      doc.text(label, 14, y);
+      doc.text(value, 190, y, { align: "right" });
+      y += 8;
+    };
+
+    addLineItem("Base Project", `GHC${baseCost}`);
+    addLineItem("Pages/Screens", `GHC${pagesCost}`);
+    addLineItem("Additional Features", `GHC${featuresCost}`);
+    addLineItem("Rush Fee", `GHC${rushFee}`);
+
+    // Separator line
+    doc.setLineWidth(0.5);
+    doc.line(14, y, 196, y);
     y += 8;
-    doc.text(`Number of Pages/Screens: ${pages}`, 14, y);
-    y += 8;
-    doc.text(
-      `Additional Features: ${selectedFeatures.length > 0 ? selectedFeatures.map(f => FEATURES.find(opt => opt.value === f)?.label).join(", ") : "None"}`,
-      14,
-      y
-    );
-    y += 8;
-    doc.text(`Delivery Timeline: ${timeline.label}`, 14, y);
-    y += 8;
-    doc.text(`Maintenance Plan: ${maintenance.label}`, 14, y);
-    y += 12;
+
     doc.setFontSize(14);
-    doc.text("Breakdown", 14, y);
-    y += 8;
+    addLineItem("Project Total", `GHC${projectTotal}`);
+
+    y += 8; // Add extra space before monthly maintenance
     doc.setFontSize(12);
-    doc.text(`Base Project: GHC${baseCost}`, 14, y);
-    y += 8;
-    doc.text(`Pages/Screens: GHC${pagesCost}`, 14, y);
-    y += 8;
-    doc.text(`Additional Features: GHC${featuresCost}`, 14, y);
-    y += 8;
-    doc.text(`Rush Fee: GHC${rushFee}`, 14, y);
-    y += 8;
-    doc.text(`Project Total: GHC${projectTotal}`, 14, y);
-    y += 8;
-    doc.text(`Monthly Maintenance: GHC${maintenanceCost}/month`, 14, y);
-    y += 16;
+    addLineItem("Monthly Maintenance", `GHC${maintenanceCost}/month`);
+
+    // Add a footer or note if needed
+    y += 20;
     doc.setFontSize(10);
-    doc.text("Thank you for using our quote generator!", 14, y);
+    doc.text("Note: This is an estimated quote and may be subject to change.", 14, y);
+    y += 5;
+    doc.text("Generated on: " + new Date().toLocaleDateString(), 14, y);
+
     doc.save("project-quote.pdf");
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black bg-opacity-40" onClick={onClose}></div>
       {/* Modal Content */}
       <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden z-10 max-h-[90vh] md:max-h-none overflow-y-auto">
         {/* Left: Project Details */}
