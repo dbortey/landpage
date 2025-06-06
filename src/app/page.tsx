@@ -1,102 +1,70 @@
-import Image from "next/image";
+import React from "react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="relative min-h-screen flex flex-col justify-between bg-[#f8fbfc] font-sans overflow-x-hidden">
+      {/* Dotted Background Pattern */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <svg width="100%" height="100%" className="w-full h-full" style={{ opacity: 0.18 }}>
+          <defs>
+            <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="2" fill="#b3b3b3" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dots)" />
+        </svg>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      {/* Main Content */}
+      <main className="relative z-10 flex flex-col md:flex-row items-center justify-center flex-1 w-full max-w-6xl mx-auto px-4 py-12 gap-12 md:gap-8">
+        {/* Left Side: Intro Section */}
+        <section className="flex-1 flex flex-col items-start justify-center max-w-xl w-full gap-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Welcome!</h1>
+          <h2 className="text-2xl md:text-3xl font-medium text-gray-800 mb-2">Plan and navigate<br className="hidden md:block" /> from idea to launch.</h2>
+          <p className="text-gray-700 text-base md:text-lg mb-4">Set the direction and pace of your product journey with clear purpose.</p>
+          <form className="w-full max-w-sm mt-2">
+            <label htmlFor="email" className="block text-gray-700 mb-1">Reach out!</label>
+            <div className="flex">
+              <input
+                id="email"
+                type="email"
+                placeholder="email here"
+                className="flex-1 rounded-l border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400 text-gray-800 bg-white"
+              />
+              <button
+                type="submit"
+                className="rounded-r bg-lime-400 hover:bg-lime-500 text-gray-900 font-semibold px-4 py-2 border border-l-0 border-gray-300 transition-colors"
+              >
+                Send
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* Right Side: Two Option Cards */}
+        <section className="flex-1 flex flex-col md:flex-row gap-6 w-full max-w-xl">
+          {/* Card 1: Project Brief */}
+          <div className="flex-1 rounded-2xl bg-gradient-to-br from-lime-200 via-lime-100 to-lime-300 shadow-md p-7 flex flex-col justify-between min-w-[260px]">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-6">This quick brief will kick off the project and keep us on track.</h3>
+              <button className="w-full rounded bg-gray-900 text-lime-300 font-semibold text-lg py-2 mt-2 mb-4 hover:bg-gray-800 transition-colors">Create project brief</button>
+            </div>
+            <p className="text-xs text-gray-700 mt-2">Disclaimer: this brief is created and managed by you. We do not edit this brief and can not make edits to this particular brief.</p>
+          </div>
+          {/* Card 2: Project Quote */}
+          <div className="flex-1 rounded-2xl bg-gradient-to-br from-sky-200 via-cyan-200 to-cyan-400 shadow-md p-7 flex flex-col justify-between min-w-[260px]">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-6">This quick quote to give you a general idea of the project cost.</h3>
+              <button className="w-full rounded bg-gray-900 text-cyan-200 font-semibold text-lg py-2 mt-2 mb-4 hover:bg-gray-800 transition-colors">Get project quote</button>
+            </div>
+            <p className="text-xs text-gray-700 mt-2">Disclaimer: this quote is created and managed by you. This quote is not fixed and can be updated based on project needs as at discussion.</p>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="relative z-10 w-full px-4 pb-4">
+        <span className="text-xs text-gray-500 absolute left-4 bottom-4">mrbortey - 2025</span>
       </footer>
     </div>
   );
