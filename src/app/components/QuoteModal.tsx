@@ -129,16 +129,16 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden">
         {/* Left: Project Details */}
-        <div className="flex-1 p-8 bg-white">
+        <div className="flex-1 p-8 bg-white text-gray-900">
           <h2 className="text-2xl font-bold mb-6">Project Details</h2>
           {/* Project Type */}
           <div className="mb-4">
             <label className="block font-medium mb-1">Project Type</label>
             <select
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 text-gray-900"
               value={projectType.value}
               onChange={(e) => setProjectType(PROJECT_TYPES.find(pt => pt.value === e.target.value) || PROJECT_TYPES[0])}
             >
@@ -184,7 +184,7 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
           <div className="mb-4">
             <label className="block font-medium mb-1">Delivery Timeline</label>
             <select
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 text-gray-900"
               value={timeline.value}
               onChange={(e) => setTimeline(TIMELINES.find(t => t.value === e.target.value) || TIMELINES[0])}
             >
@@ -197,7 +197,7 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
           <div className="mb-6">
             <label className="block font-medium mb-1">Maintenance Plan</label>
             <select
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 text-gray-900"
               value={maintenance.value}
               onChange={(e) => setMaintenance(MAINTENANCE.find(m => m.value === e.target.value) || MAINTENANCE[0])}
             >
@@ -214,7 +214,7 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
           </button>
         </div>
         {/* Right: Quote Summary */}
-        <div className="flex-1 p-8 bg-gradient-to-br from-cyan-200 via-sky-200 to-cyan-400 flex flex-col justify-between">
+        <div className="flex-1 p-8 bg-gradient-to-br from-cyan-200 via-sky-200 to-cyan-400 flex flex-col justify-between text-gray-900">
           <div>
             <h2 className="text-2xl font-bold mb-6">Your Custom Quote</h2>
             <div className="flex justify-between mb-2 text-base">
