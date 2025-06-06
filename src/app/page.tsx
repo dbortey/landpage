@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import QuoteModal from "./components/QuoteModal";
 
 export default function Home() {
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
   return (
     <div className="relative min-h-screen flex flex-col justify-between bg-[#f8fbfc] font-sans overflow-x-hidden">
       {/* Dotted Background Pattern */}
@@ -55,7 +57,12 @@ export default function Home() {
           <div className="flex-1 rounded-2xl bg-gradient-to-br from-sky-200 via-cyan-200 to-cyan-400 shadow-md p-7 flex flex-col justify-between min-w-[260px]">
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-6">This quick quote to give you a general idea of the project cost.</h3>
-              <button className="w-full rounded bg-gray-900 text-cyan-200 font-semibold text-lg py-2 mt-2 mb-4 hover:bg-gray-800 transition-colors">Get project quote</button>
+              <button
+                className="w-full rounded bg-gray-900 text-cyan-200 font-semibold text-lg py-2 mt-2 mb-4 hover:bg-gray-800 transition-colors"
+                onClick={() => setShowQuoteModal(true)}
+              >
+                Get project quote
+              </button>
             </div>
             <p className="text-xs text-gray-700 mt-2">Disclaimer: this quote is created and managed by you. This quote is not fixed and can be updated based on project needs as at discussion.</p>
           </div>
@@ -66,6 +73,7 @@ export default function Home() {
       <footer className="relative z-10 w-full px-4 pb-4">
         <span className="text-xs text-gray-500 absolute left-4 bottom-4">mrbortey - 2025</span>
       </footer>
+      <QuoteModal open={showQuoteModal} onClose={() => setShowQuoteModal(false)} />
     </div>
   );
 }
