@@ -129,8 +129,11 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black bg-opacity-40" onClick={onClose}></div>
+      {/* Modal Content */}
+      <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden z-10 max-h-[90vh] md:max-h-none overflow-y-auto">
         {/* Left: Project Details */}
         <div className="flex-1 p-8 bg-white text-gray-900">
           <h2 className="text-2xl font-bold mb-6">Project Details</h2>
