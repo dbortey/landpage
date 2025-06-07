@@ -116,10 +116,8 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black bg-opacity-40" onClick={onClose}></div>
       {/* Modal Content */}
-      <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden z-10 max-h-[90vh] md:max-h-none overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden z-10 max-h-[90vh] md:max-h-none overflow-y-auto">
         {/* Left: Project Details */}
         <div className="flex-1 p-8 bg-white text-gray-900">
           <h2 className="text-2xl font-bold mb-6">Project Details</h2>
@@ -274,6 +272,7 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
                 height: 100vh;
                 margin: 0;
                 color: #333;
+                font-size: 9.6px; /* Reduced by 40% from default */
             }
             .container {
                 background: white;
@@ -286,13 +285,15 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
                 text-align: center;
                 color: #1a73e8;
                 margin-bottom: 20px;
+                font-size: 12px; /* Reduced by 40% from 20px */
             }
             h2 {
                 color: #1a73e8;
                 margin-top: 20px;
+                font-size: 9.6px; /* Reduced by 40% from 16px */
             }
             .project-total {
-                font-size: 24px;
+                font-size: 14.4px; /* Reduced by 40% from 24px */
                 text-align: center;
                 margin: 20px 0;
             }
@@ -322,9 +323,10 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
                 padding: 10px;
                 border-radius: 5px;
                 text-align: center;
+                font-size: 9.6px; /* Reduced by 40% from default */
             }
             .disclaimer {
-                font-size: 12px;
+                font-size: 7.2px; /* Reduced by 40% from 12px */
                 text-align: center;
                 margin-top: 20px;
                 color: #666;
