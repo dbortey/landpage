@@ -5,6 +5,34 @@ import QuoteModal from "./components/QuoteModal";
 
 export default function Home() {
   const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailStatus, setEmailStatus] = useState(""); // To show success/error message
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailStatus("Sending...");
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setEmailStatus('Email sent successfully!');
+        setEmail(''); // Clear the input
+      } else {
+        setEmailStatus(`Failed to send email: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error submitting email:', error);
+      setEmailStatus('An error occurred while sending email.');
+    }
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col justify-between bg-[#f8fbfc] font-sans overflow-x-hidden">
       {/* Dotted Background Pattern */}
@@ -26,7 +54,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Welcome!</h1>
           <h2 className="text-2xl md:text-3xl font-medium text-gray-800 mb-2">Plan and navigate<br className="hidden md:block" /> from idea to launch.</h2>
           <p className="text-gray-700 text-base md:text-lg mb-4">Set the direction and pace of your product journey with clear purpose.</p>
-          <form className="w-full max-w-sm mt-2">
+          <form className="w-full max-w-sm mt-2" onSubmit={handleEmailSubmit}>
             <label htmlFor="email" className="block text-gray-700 mb-1">Reach out!</label>
             <div className="flex">
               <input
@@ -34,6 +62,9 @@ export default function Home() {
                 type="email"
                 placeholder="email here"
                 className="flex-1 rounded-l border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400 text-gray-800 bg-white"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
               <button
                 type="submit"
@@ -42,6 +73,7 @@ export default function Home() {
                 Send
               </button>
             </div>
+            {emailStatus && <p className="text-sm mt-2 text-gray-600">{emailStatus}</p>}
           </form>
         </section>
 
