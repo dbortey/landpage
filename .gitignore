@@ -42,3 +42,5 @@ next-env.d.ts
 
 # local environment variables
 .env.local
+
+RESEND_API_KEY=re_cub44Vma_MjMVnuBn6WQ1r4uL5KGL1Hpp
