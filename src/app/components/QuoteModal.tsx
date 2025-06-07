@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface FeatureOption {
   label: string;
@@ -65,6 +66,8 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
   const [timeline, setTimeline] = useState(TIMELINES[0]);
   const [maintenance, setMaintenance] = useState(MAINTENANCE[0]);
 
+  const pdfContentRef = useRef<HTMLDivElement>(null);
+
   if (!open) return null;
 
   // Calculate costs
@@ -87,49 +90,34 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
   };
 
   // Download PDF implementation
-  const handleDownload = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Your Custom Quote", 14, 25);
+  const handleDownload = async () => {
+    if (pdfContentRef.current) {
+      const canvas = await html2canvas(pdfContentRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-    let y = 40;
-    doc.setFontSize(12);
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
-    const addLineItem = (label: string, value: string) => {
-      doc.text(label, 14, y);
-      doc.text(value, 190, y, { align: "right" });
-      y += 8;
-    };
-
-    addLineItem("Base Project", `GHC${baseCost}`);
-    addLineItem("Pages/Screens", `GHC${pagesCost}`);
-    addLineItem("Additional Features", `GHC${featuresCost}`);
-    addLineItem("Rush Fee", `GHC${rushFee}`);
-
-    // Separator line
-    doc.setLineWidth(0.5);
-    doc.line(14, y, 196, y);
-    y += 8;
-
-    doc.setFontSize(14);
-    addLineItem("Project Total", `GHC${projectTotal}`);
-
-    y += 8; // Add extra space before monthly maintenance
-    doc.setFontSize(12);
-    addLineItem("Monthly Maintenance", `GHC${maintenanceCost}/month`);
-
-    // Add a footer or note if needed
-    y += 20;
-    doc.setFontSize(10);
-    doc.text("Note: This is an estimated quote and may be subject to change.", 14, y);
-    y += 5;
-    doc.text("Generated on: " + new Date().toLocaleDateString(), 14, y);
-
-    doc.save("project-quote.pdf");
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      pdf.save('project-quote.pdf');
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black bg-opacity-40" onClick={onClose}></div>
       {/* Modal Content */}
       <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl mx-4 overflow-hidden z-10 max-h-[90vh] md:max-h-none overflow-y-auto">
         {/* Left: Project Details */}
@@ -252,6 +240,96 @@ export default function QuoteModal({ open, onClose }: { open: boolean; onClose: 
             Download Quote PDF
           </button>
         </div>
+      </div>
+      {/* Hidden content for PDF generation */}
+      <div ref={pdfContentRef} style={{ position: 'absolute', left: '-9999px', top: '-9999px', zIndex: -1 }}>
+        <div className="container">
+            <h1>Your Custom Quote</h1>
+            <div className="project-total">Project Total: GH¢{projectTotal}</div>
+            <ul>
+                <li>Project Type: {projectType.label}</li>
+                <li>Number of Pages/Screens: {pages}</li>
+                <li>Additional Features: {selectedFeatures.length > 0 ? selectedFeatures.map(f => FEATURES.find(opt => opt.value === f)?.label).join(', ') : 'None'}</li>
+                <li>Delivery Timeline: {timeline.label}</li>
+                <li>Maintenance Plan: {maintenance.label}</li>
+            </ul>
+            <h2>Breakdown</h2>
+            <div className="breakdown">
+                <div className="breakdown-item">Base Project: GH¢{baseCost}</div>
+                <div className="breakdown-item">Rush Fee: GH¢{rushFee}</div>
+                <div className="breakdown-item">Pages/Screens: GH¢{pagesCost}</div>
+                <div className="breakdown-item">Additional Features: GH¢{featuresCost}</div>
+                <div className="breakdown-item">Project Total: GH¢{projectTotal}</div>
+                <div className="breakdown-item">Monthly Maintenance: GH¢{maintenanceCost}</div>
+            </div>
+            <div className="disclaimer">Disclaimer: this quote is created and managed by you. This quote is not fixed and can be updated based on project needs as at discussion.</div>
+        </div>
+        <style dangerouslySetInnerHTML={{ __html: `
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #e6f3f9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                color: #333;
+            }
+            .container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                width: 400px;
+            }
+            h1 {
+                text-align: center;
+                color: #1a73e8;
+                margin-bottom: 20px;
+            }
+            h2 {
+                color: #1a73e8;
+                margin-top: 20px;
+            }
+            .project-total {
+                font-size: 24px;
+                text-align: center;
+                margin: 20px 0;
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            li {
+                margin: 10px 0;
+                position: relative;
+                padding-left: 25px;
+            }
+            li:before {
+                content: "\u2714"; /* Unicode checkmark */
+                color: #1a73e8;
+                position: absolute;
+                left: 0;
+            }
+            .breakdown {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 20px;
+            }
+            .breakdown div {
+                background: #f5f5f5;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+            }
+            .disclaimer {
+                font-size: 12px;
+                text-align: center;
+                margin-top: 20px;
+                color: #666;
+            }
+        ` }} />
       </div>
     </div>
   );
